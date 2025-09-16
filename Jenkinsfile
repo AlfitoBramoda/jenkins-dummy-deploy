@@ -44,13 +44,16 @@ pipeline {
 
         stage('Execute Deploy Script') {
             steps {
-                script {
-                    def FINAL_URL = "https://httpbin.org/post"
-                    def encoded = "user:password".bytes.encodeBase64().toString()
-                    env.AUTH = encoded
+                withCredentials([usernamePassword(credentialsId: 'httpbin-credentials', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {
+                    script {
+                        def FINAL_URL = "https://httpbin.org/post"
+                        def authString = "${USERNAME}:${PASSWORD}"
+                        def encoded = Base64.encoder.encodeToString(authString.getBytes("UTF-8"))
+                        env.AUTH = encoded
 
-                    // langsung pakai bash, tidak perlu chmod
-                    sh """bash scripts/deploy.sh "$AUTH" "$FINAL_URL" "payload_temp.json" """
+                        // langsung pakai bash, tidak perlu chmod
+                        sh """bash scripts/deploy.sh "$AUTH" "$FINAL_URL" "payload_temp.json" """
+                    }
                 }
             }
         }
