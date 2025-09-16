@@ -44,7 +44,7 @@ pipeline {
 
         stage('Execute Deploy Script') {
             steps {
-                withCredentials([usernamePassword(credentialsId: '13a1f1f4-d5b6-4ad0-a1ba-175e0cc888d1', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: '13a1f1f4-d5b6-4ad0-a1ba-175e0cc888d1', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     script {
                         def FINAL_URL = "https://httpbin.org/post"
                         def authString = "${USERNAME}:${PASSWORD}"
